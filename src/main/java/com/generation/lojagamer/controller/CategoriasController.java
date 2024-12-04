@@ -16,7 +16,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.lojagamer.model.Categoria;
 import com.generation.lojagamer.repository.CategoriasRepository;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,22 +38,22 @@ public class CategoriasController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Categoria> getById(@RequestParam long id) {
+    public ResponseEntity<Categoria> getById(@PathVariable long id) {
         return categoriasRepository.findById(id).map(resp -> ResponseEntity.ok(resp)).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/nome/{nome}")
-    public ResponseEntity<List<Categoria>> getByName(@RequestParam String nome) {
+    public ResponseEntity<List<Categoria>> getByName(@PathVariable String nome) {
         return ResponseEntity.ok(categoriasRepository.findAllByNomeContainingIgnoreCase(nome));
     }
 
     @PostMapping
-    public ResponseEntity<Categoria> post(@RequestBody Categoria categoria) {
+    public ResponseEntity<Categoria> post(@Valid @RequestBody Categoria categoria) {
         return ResponseEntity.status(201).body(categoriasRepository.save(categoria));
     }
 
     @PutMapping
-    public ResponseEntity<Categoria> put(@RequestBody Categoria categoria) {
+    public ResponseEntity<Categoria> put(@Valid @RequestBody Categoria categoria) {
         return ResponseEntity.status(200).body(categoriasRepository.save(categoria));
     }
     
