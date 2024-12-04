@@ -40,6 +40,4 @@ public class Produtos {
         @ManyToOne
         @JsonIgnoreProperties("produtos")
         private Categoria categoria;
-        
-
 }
