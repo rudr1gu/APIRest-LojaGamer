@@ -2,6 +2,8 @@
 ## Descrição
 A Loja Gamer API é uma aplicação RESTful construída com Spring Boot, que fornece endpoints para gerenciar categorias e produtos de uma loja de jogos. A API oferece funcionalidades para listar, buscar, criar, atualizar e deletar recursos.
 
+A aplicação foi reorganizada para seguir a **Arquitetura Hexagonal (Ports and Adapters)**, separando regras de negócio (casos de uso), contratos (portas) e implementações de infraestrutura (adaptadores).
+
 ### Tecnologias Utilizadas
 - Java 17
 - Spring Boot 3.x
@@ -10,7 +12,7 @@ A Loja Gamer API é uma aplicação RESTful construída com Spring Boot, que for
 - Jakarta Validation
 - Lombok
 
-## Endpoints:
+## Endpoints
 ### Produtos
 
 - `GET /produtos` - Lista todos os produtos
@@ -24,25 +26,41 @@ A Loja Gamer API é uma aplicação RESTful construída com Spring Boot, que for
 
 - `GET /categorias` - Lista todas as categorias
 - `GET /categorias/{id}` - Retorna uma categoria específica
-- `GET /categorias/nome/{nome}` - Retorna um produto específico pelo nome
+- `GET /categorias/nome/{nome}` - Retorna categoria pelo nome
 - `POST /categorias` - Cria uma nova categoria
 - `PUT /categorias` - Atualiza uma categoria existente
 - `DELETE /categorias/{id}` - Deleta uma categoria
 
-```
+## Estrutura (Arquitetura Hexagonal)
+
+```text
 src/
-├── main/
-│   |   ├── java/
-|   │   |   ├── controller/
-|   │   |   |   ├── CategoriasController.java
-|   │   |   |   ├── ProdutosController.java
-|   │   |   ├── model/
-|   │   |   |   ├── Categorias.java
-|   │   |   |   ├── Produtos.java
-|   │   |   ├── repository/
-|   │   |   |   ├── CategoriasRepository.java
-|   │   |   |   ├── ProdutosRepository.java
-|   │   |   ├── LojagamerApplication.java
-│   |   ├── resources/
-|   │   |   ├── application.properties
+└── main/
+    ├── java/com/generation/lojagamer/
+    │   ├── adapters/
+    │   │   ├── in/web/
+    │   │   │   ├── CategoriasController.java
+    │   │   │   └── ProdutosController.java
+    │   │   └── out/persistence/
+    │   │       ├── CategoriaPersistenceAdapter.java
+    │   │       ├── ProdutoPersistenceAdapter.java
+    │   │       ├── SpringDataCategoriaRepository.java
+    │   │       └── SpringDataProdutoRepository.java
+    │   ├── application/
+    │   │   ├── port/
+    │   │   │   ├── in/
+    │   │   │   │   ├── CategoriaUseCase.java
+    │   │   │   │   └── ProdutoUseCase.java
+    │   │   │   └── out/
+    │   │   │       ├── CategoriaPersistencePort.java
+    │   │   │       └── ProdutoPersistencePort.java
+    │   │   └── service/
+    │   │       ├── CategoriaService.java
+    │   │       └── ProdutoService.java
+    │   ├── domain/model/
+    │   │   ├── Categoria.java
+    │   │   └── Produtos.java
+    │   └── LojagamerApplication.java
+    └── resources/
+        └── application.properties
 ```
